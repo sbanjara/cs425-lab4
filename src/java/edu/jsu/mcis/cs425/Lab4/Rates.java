@@ -117,6 +117,14 @@ public class Rates {
              * *** INSERT YOUR CODE HERE ***
              */
             
+            String[] header = iterator.next();
+            while( iterator.hasNext() ) {
+                
+                row = iterator.next();
+                rates.put(row[1], row[2]);
+                
+            }
+            
             json.put("rates", rates);
             
             /* Parse top-level container to a JSON string */
