@@ -121,11 +121,13 @@ public class Rates {
             while( iterator.hasNext() ) {
                 
                 row = iterator.next();
-                rates.put(row[1], row[2]);
+                rates.put(row[1], Double.parseDouble(row[2]));
                 
             }
             
             json.put("rates", rates);
+            json.put("base", "USD");
+            json.put("date", "09/21/2019");
             
             /* Parse top-level container to a JSON string */
             
