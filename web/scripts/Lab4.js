@@ -17,10 +17,15 @@ var Lab4 = ( function() {
              */
 
             // INSERT YOUR CODE HERE
-          
             
-            
-
+            var input = document.getElementById("input").value;
+            var data = rates["rates"];
+            var output = document.createElement("p");
+            for(var rate in data) {
+                output.innerHTML = rate + ":" + (data[rate] * input);
+                
+            }
+           
         },
         
         getConversion: function() {

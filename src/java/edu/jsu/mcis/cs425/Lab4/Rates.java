@@ -127,7 +127,7 @@ public class Rates {
             
             json.put("rates", rates);
             json.put("base", "USD");
-            json.put("date", "09/21/2019");
+            json.put("date", "09-21-2019");
             
             /* Parse top-level container to a JSON string */
             
@@ -137,7 +137,7 @@ public class Rates {
         catch (Exception e) { System.err.println( e.toString() ); }
         
         /* Return JSON string */
-        
+        System.err.println(results);
         return (results.trim());
         
     }
