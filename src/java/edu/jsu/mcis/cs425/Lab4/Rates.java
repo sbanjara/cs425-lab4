@@ -112,9 +112,7 @@ public class Rates {
              * Add rate data to "rates" container and add "date" and "base"
              * values to "json" container.  See the "getRatesAsTable()" method
              * for an example of how to get the CSV data from the list, and
-             * don't forget to skip the header row!
-             *
-             * *** INSERT YOUR CODE HERE ***
+             * don't forget to skip the header row!s
              */
             
             String[] header = iterator.next();

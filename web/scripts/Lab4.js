@@ -15,16 +15,22 @@ var Lab4 = ( function() {
              * currency codes, separated by colons and formatted to two decimal
              * places.  (See the screenshot given with this assignment.)
              */
-
-            // INSERT YOUR CODE HERE
             
-            var input = document.getElementById("input").value;
+            var input_t = document.getElementById("input").value;
+            var input = parseInt(input_t);
             var data = rates["rates"];
-            var output = document.createElement("p");
+            var s = "";
             for(var rate in data) {
-                output.innerHTML = rate + ":" + (data[rate] * input);
+                
+                s += "<br>";
+                s += rate;
+                s += ": ";
+                s += data[rate]*input;
+                s += "</br>";
                 
             }
+            $('#output').html(s);
+            //$('#output').html("<br>Based on " + rates["date"] + " Exchange Rates.</br>");
            
         },
         
