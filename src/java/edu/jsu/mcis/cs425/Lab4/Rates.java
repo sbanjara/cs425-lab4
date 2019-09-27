@@ -125,7 +125,7 @@ public class Rates {
             
             json.put("rates", rates);
             json.put("base", "USD");
-            json.put("date", "09-21-2019");
+            json.put("date", "2019-09-20");
             
             /* Parse top-level container to a JSON string */
             

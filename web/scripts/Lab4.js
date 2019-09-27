@@ -17,21 +17,34 @@ var Lab4 = ( function() {
              */
             
             var input_t = document.getElementById("input").value;
-            var input = parseInt(input_t);
             var data = rates["rates"];
             var s = "";
-            for(var rate in data) {
+            
+            if(input_t.length > 0 && !isNaN(input_t)) {
                 
-                s += "<br>";
-                s += rate;
-                s += ": ";
-                s += data[rate]*input;
-                s += "</br>";
+                var input = parseInt(input_t);
+                if(input > 0) {
+                    
+                    for(var rate in data) {
+                        var convertedRate = data[rate]*input;
+                        s += "<p>" + rate + ": " + convertedRate.toFixed(2) + "</p>";                 
+                    }
+
+                    s += "<p>Based on " + rates["date"] + " Exchange Rates.</p>";
+                    $('#output').html(s);
+                    
+                } 
+                else {
+                    $('#output').html("Invalid Entry!! Please enter a positive integer!!");
+                    document.getElementById("input").value = "";
+                }
                 
             }
-            $('#output').html(s);
-            //$('#output').html("<br>Based on " + rates["date"] + " Exchange Rates.</br>");
-           
+            else {
+                $('#output').html("Invalid Entry!! Please enter a positive integer!!");
+                document.getElementById("input").value = "";
+            }
+               
         },
         
         getConversion: function() {
