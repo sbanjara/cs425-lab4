@@ -4,8 +4,14 @@ import com.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -138,6 +144,26 @@ public class Rates {
         System.err.println(results);
         return (results.trim());
         
+    }
+    
+    public static String getRateAsJson(String Code) throws NamingException {
+        
+        Context envContext = null, initContext = null;
+        DataSource ds = null;
+        Connection conn = null;
+        
+         try {
+            
+            envContext = new InitialContext();
+            initContext  = (Context)envContext.lookup("java:/comp/env");
+            ds = (DataSource)initContext.lookup("jdbc/db_pool");
+            conn = ds.getConnection();
+            
+        }
+        
+        catch (SQLException e) {}
+         
+        return "";
     }
 
 }
