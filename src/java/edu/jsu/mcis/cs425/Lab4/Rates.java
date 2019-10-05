@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
@@ -141,29 +143,89 @@ public class Rates {
         catch (Exception e) { System.err.println( e.toString() ); }
         
         /* Return JSON string */
-        System.err.println(results);
+    
         return (results.trim());
         
     }
     
-    public static String getRateAsJson(String Code) throws NamingException {
+    public static String getRateAsJson(String Code) throws NamingException, SQLException {
+        
+        String results = "";
         
         Context envContext = null, initContext = null;
         DataSource ds = null;
-        Connection conn = null;
+        Connection connection = null;
         
-         try {
+        PreparedStatement pstatement = null;
+        ResultSet resultset = null;
+        
+        String query;
+        
+        boolean hasresults;
+        
+        try {
+            
+            JSONObject json = new JSONObject();
+            JSONObject rates = new JSONObject();
             
             envContext = new InitialContext();
             initContext  = (Context)envContext.lookup("java:/comp/env");
             ds = (DataSource)initContext.lookup("jdbc/db_pool");
-            conn = ds.getConnection();
+            connection = ds.getConnection();
+            
+            query = "SELECT * FROM rates WHERE code = ?";
+            
+            pstatement = connection.prepareStatement(query);
+            pstatement.setString(1, Code);
+            
+            hasresults = pstatement.execute();
+            String date = "";
+            
+            while ( hasresults || pstatement.getUpdateCount() != -1 ) {
+                
+                if ( hasresults ) {
+                    resultset = pstatement.getResultSet();
+                    date = resultset.getString(3);
+                    rates.put(resultset.getString(1), resultset.getDouble(2));
+                }
+                
+                else {
+                    
+                    if ( pstatement.getUpdateCount() == -1 ) {
+                        break;
+                    }
+                    
+                }
+
+                hasresults = pstatement.getMoreResults();
+            
+            }
+            
+            json.put("rates", rates);
+            json.put("date", date);
+            json.put("base", Code);
+            
+            results = JSONValue.toJSONString(json);
+        
+        }
+        
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        
+        finally {
+            
+            if (resultset != null) { try { resultset.close(); resultset = null; } catch (Exception e) {} }
+            
+            if (pstatement != null) { try { pstatement.close(); pstatement = null; } catch (Exception e) {} }
+            
+            if (connection != null) { connection.close(); }
             
         }
         
-        catch (SQLException e) {}
-         
-        return "";
+        return (results.trim());
+        
     }
+    
 
 }
