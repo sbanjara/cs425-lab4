@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Lab4"/>
+<Context path="/Lab4">
     <Resource auth="Container" 
             driverClassName="com.mysql.jdbc.Driver"
             initialSize="10" 

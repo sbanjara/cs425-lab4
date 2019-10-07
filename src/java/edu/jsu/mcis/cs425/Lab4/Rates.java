@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.StringReader;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -148,7 +149,7 @@ public class Rates {
         
     }
     
-    public static String getRateAsJson(String Code) throws NamingException, SQLException {
+    public static String getRatesAsJson(String Code) throws NamingException, SQLException {
         
         String results = "";
         
@@ -160,13 +161,12 @@ public class Rates {
         ResultSet resultset = null;
         
         String query;
-        
         boolean hasresults;
         
+        JSONObject json = new JSONObject();
+        JSONObject rates = new JSONObject();
+        
         try {
-            
-            JSONObject json = new JSONObject();
-            JSONObject rates = new JSONObject();
             
             envContext = new InitialContext();
             initContext  = (Context)envContext.lookup("java:/comp/env");
@@ -175,17 +175,21 @@ public class Rates {
             
             query = "SELECT * FROM rates WHERE code = ?";
             
+            System.out.println("Test 1");
+            
             pstatement = connection.prepareStatement(query);
-            pstatement.setString(1, Code);
+            
+            if(Code != null)
+                pstatement.setString(1, Code);
             
             hasresults = pstatement.execute();
-            String date = "";
+            Date date = null;
             
             while ( hasresults || pstatement.getUpdateCount() != -1 ) {
                 
                 if ( hasresults ) {
                     resultset = pstatement.getResultSet();
-                    date = resultset.getString(3);
+                    date = resultset.getDate(3);
                     rates.put(resultset.getString(1), resultset.getDouble(2));
                 }
                 
@@ -203,7 +207,7 @@ public class Rates {
             
             json.put("rates", rates);
             json.put("date", date);
-            json.put("base", Code);
+            json.put("base", "USD");
             
             results = JSONValue.toJSONString(json);
         
