@@ -24,7 +24,7 @@ public class latest extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
            
             try {
-                out.println(Rates.getRatesAsJson( request.getParameter("code")) );
+                out.println( Rates.getRatesAsJson( request.getParameter("code")) );
             } 
             catch (NamingException ex) {
                 Logger.getLogger(latest.class.getName()).log(Level.SEVERE, null, ex);

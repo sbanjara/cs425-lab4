@@ -149,10 +149,9 @@ public class Rates {
         
     }
     
-    public static String getRatesAsJson(String Code) throws NamingException, SQLException {
+    public static String getRatesAsJson(String code) throws NamingException, SQLException {
         
         String results = "";
-        
         Context envContext = null, initContext = null;
         DataSource ds = null;
         Connection connection = null;
@@ -173,40 +172,35 @@ public class Rates {
             ds = (DataSource)initContext.lookup("jdbc/db_pool");
             connection = ds.getConnection();
             
-            query = "SELECT * FROM rates WHERE code = ?";
+            if (code != null)        
+                query = "SELECT * FROM rates WHERE code = ?";
             
-            System.out.println("Test 1");
+            else
+                query = "SELECT * FROM rates";
             
             pstatement = connection.prepareStatement(query);
             
-            if(Code != null)
-                pstatement.setString(1, Code);
+            if (code != null)
+                pstatement.setString(1, code);
             
             hasresults = pstatement.execute();
-            Date date = null;
-            
-            while ( hasresults || pstatement.getUpdateCount() != -1 ) {
                 
-                if ( hasresults ) {
-                    resultset = pstatement.getResultSet();
-                    date = resultset.getDate(3);
-                    rates.put(resultset.getString(1), resultset.getDouble(2));
-                }
+            if ( hasresults ) {
                 
-                else {
+                resultset = pstatement.getResultSet();
+                
+                while (resultset.next()) {
                     
-                    if ( pstatement.getUpdateCount() == -1 ) {
-                        break;
-                    }
+                    String c = resultset.getString("code");
+                    double r = resultset.getDouble("rate");
+                    rates.put(c, r);
                     
                 }
-
-                hasresults = pstatement.getMoreResults();
-            
-            }
+                
+            }          
             
             json.put("rates", rates);
-            json.put("date", date);
+            json.put("date", "2019-09-30");
             json.put("base", "USD");
             
             results = JSONValue.toJSONString(json);

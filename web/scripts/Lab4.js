@@ -29,7 +29,7 @@ var Lab4 = ( function() {
                         var convertedRate = data[rate]*input;
                         s += "<p>" + rate + ": " + convertedRate.toFixed(2) + "</p>";                 
                     }
-
+                    
                     s += "<p>Based on " + rates["date"] + " Exchange Rates.</p>";
                     $('#output').html(s);
                     
